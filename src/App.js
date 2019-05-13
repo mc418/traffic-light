@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { color } = this.props;
+    const redStyle = color === 'RED' ? 'red' : 'white';
+    const yellowStyle = color === 'YELLOW' ? 'yellow' : 'white';
+    const greenStyle = color === 'GREEN' ? 'green' : 'white';
+    return (
+      <div className="container">
+        <div className="circle" id="red" style={{backgroundColor:redStyle}}></div>
+        <div className="circle" id="yellow" style={{backgroundColor:yellowStyle}}></div>
+        <div className="circle" id="green" style={{backgroundColor:greenStyle}}></div>
+        <button onClick={() => this.props.dispatch({ type: 'CAUTION'})} disabled={color !== 'RED'}>Go</button>
+        <button onClick={() => this.props.dispatch({ type: 'STOP'})} disabled={color !== 'GREEN'}>Caution</button>
+        <button onClick={() => this.props.dispatch({ type: 'GO'})} disabled={color !== 'YELLOW'}>Stop</button>
+      </div>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    color : state
+  }
+}
+
+export default connect(mapStateToProps)(App);
